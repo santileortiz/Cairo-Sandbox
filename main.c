@@ -24,6 +24,7 @@ typedef struct {
 
 int end_execution = 0;
 
+#include "arc_clip_bug.c"
 #include "pango_test.c"
 #include "negative_arcs.c"
 #include "gaussian_blur.c"

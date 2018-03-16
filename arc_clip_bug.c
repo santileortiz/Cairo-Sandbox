@@ -1,6 +1,10 @@
+//gcc -DCAIRO_ANTIALIAS_BUG -O3 -g -Wall main.c -o main -lcairo -lX11-xcb -lX11 -lxcb -lxcb-sync -lm -lpango-1.0 -lpangocairo-1.0 -I/usr/include/pango-1.0 -I/usr/include/cairo -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include
 /*
  * Copiright (C) 2018 Santiago León O.
  */
+
+#ifdef CAIRO_ANTIALIAS_BUG
+#include <pango/pangocairo.h>
 
 // CAIRO BUG!!!
 // Clipping with some path that has an arc disables RGB antialiasing of fonts.
@@ -10,15 +14,10 @@ bool draw (app_graphics_t *gr, bool redraw) {
         draw_once = false;
         cairo_t *cr = gr->cr;
         PangoLayout *text_layout = pango_cairo_create_layout (cr);
-        PangoFontMap *fontmap = pango_cairo_font_map_get_default ();
-        PangoContext *context = pango_font_map_create_context (fontmap);
-        cairo_font_options_t *font_options = create_nice_font_options ();
-        pango_cairo_context_set_font_options (context, font_options);
         PangoFontDescription *font_desc = pango_font_description_from_string ("Open Sans 9");
         pango_layout_set_font_description (text_layout, font_desc);
         pango_font_description_free (font_desc);
 
-        cairo_clear (cr);
         cairo_set_source_rgb (cr,0,0,0);
         cairo_paint (cr);
 
@@ -55,3 +54,4 @@ bool draw (app_graphics_t *gr, bool redraw) {
     }
 }
 
+#endif // CAIRO_ANTIALIAS_BUG
